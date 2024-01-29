@@ -54,16 +54,18 @@ window.onload = function() {
     borad.height = row * blockSize;
     borad.width = col * blockSize;
     context = borad.getContext("2d");
+    document.getElementById("gameOver").classList.remove("active");
     
     placeBall()
     window.addEventListener("keyup", playerEvent);
+    let playBtn = document.getElementById("playGame");
+    playBtn.addEventListener("click", startGame);
     setInterval(update, 1000/10);
 }
 
 function update() {    
     context.fillStyle = "#424769";
     context.fillRect(0, 0, borad.width, borad.height);
-    document.getElementById("gameOver").classList.remove("active");
 
     // player's life update
     playerOneLifeDom.innerText = `Life: ${playerOneLife}`;
@@ -179,4 +181,17 @@ function drawBall(x, y, radius, color) {
 function placeBall() {
     ballX = (col * blockSize) / 2;
     ballY = (row * blockSize) / 2;
+}
+
+
+function startGame() {
+    document.getElementById("gameOver").classList.remove("active");
+    
+    playerOneLife = 3;
+    playerTwoLife = 3;
+
+    playerTwoHandlerY = (row * blockSize)/2 - playerHandlerHeight;
+    playerOneHandlerY = (row * blockSize)/2 - playerHandlerHeight;
+    placeBall()
+    update();
 }

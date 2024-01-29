@@ -124,3 +124,17 @@ html, body {
     font-size: 60px;
     font-weight: bold;
 }
+
+#playGame {
+    width: 120px;
+    height: auto;
+    background-color: rgb(10, 154, 42);
+    border: 0 solid;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px;
+}
+
+#playGame:hover {background-color: rgb(14, 182, 50);}
