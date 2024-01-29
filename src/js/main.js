@@ -16,12 +16,25 @@ var playerOneHandlerY = (row * blockSize)/2 - playerHandlerHeight;
 var playerTwoHandlerX = (col * blockSize) - 20;
 var playerTwoHandlerY = (row * blockSize)/2 - playerHandlerHeight;
 
+var playerOneLife = 3;
+var playerTwoLife = 3;
+
+var playerOneScore = 0;
+var playerTwoScore = 0;
+
+
 var ballX = col * blockSize;
 var ballY = row * blockSize;
 var ballRadius = Math.PI * 6;
 
 var ballXSpeed = Math.floor(Math.random() * 76 + 25) / 10;
 var ballYSpeed = Math.floor(Math.random() * 76 + 25) / 10;
+
+var playerOneLifeDom = document.getElementById("playerOneLife");
+var playerTwoLifeDom = document.getElementById("playerTwoLife");
+
+var playerOneScoreDom = document.getElementById("scorePlayOne");
+var playerTwoScoreDom = document.getElementById("scorePlayTwo");
 
 if (Math.floor(Math.random() * 2) == 0) {
     ballXSpeed = -ballXSpeed;
@@ -47,10 +60,18 @@ window.onload = function() {
     setInterval(update, 1000/10);
 }
 
-function update() {
+function update() {    
     context.fillStyle = "#424769";
     context.fillRect(0, 0, borad.width, borad.height);
+    document.getElementById("gameOver").classList.remove("active");
 
+    // player's life update
+    playerOneLifeDom.innerText = `Life: ${playerOneLife}`;
+    playerTwoLifeDom.innerText = `Life: ${playerTwoLife}`;
+
+    // player's score update
+    playerOneScoreDom.innerText = `Score: ${playerOneScore}`;
+    playerTwoScoreDom.innerText = `Score: ${playerTwoScore}`;
 
     // Player One Handler
     drawPlayHandler(playerOneHandlerX, playerOneHandlerY, playerHandlerWidth, playerHandlerHeight, "white")
@@ -79,6 +100,7 @@ function update() {
         ballY < playerOneHandlerY + playerHandlerHeight &&
         ballY + ballRadius > playerOneHandlerY) {
             ballXSpeed = -ballXSpeed;
+            playerOneScore += 1;
         }
     
     // Player two collision
@@ -87,7 +109,43 @@ function update() {
         ballY < playerTwoHandlerY + playerHandlerHeight &&
         ballY + ballRadius > playerTwoHandlerY) {
             ballXSpeed = -ballXSpeed;
+            playerTwoScore += 1;
         }
+
+    
+    // Player's life
+    if (ballX < 0 && playerOneLife > 0) {
+        playerOneLife -= 1;
+        placeBall();
+    }
+
+    if (ballX > borad.width && playerTwoLife > 0) {
+        playerTwoLife -= 1;
+        placeBall();
+    }
+
+    // Game Over
+    if (playerTwoLife <= 0 || playerOneLife <= 0) {
+        document.getElementById("playerOneScore").innerText = `Player One Score: ${playerOneScore}`
+        document.getElementById("playerTwoScore").innerText = `Player Two Score: ${playerTwoScore}`
+        
+
+        if (playerOneScore > playerTwoScore) {
+            if (playerOneLife > playerTwoLife) {
+                document.getElementById("winer").innerText = "The Winer Is Player One";
+            } else {
+                document.getElementById("winer").innerText = "The Winer Is Player Two";
+            }
+        } else {
+            if (playerOneLife > playerTwoLife) {
+                document.getElementById("winer").innerText = "The Winer Is Player One";
+            } else {
+                document.getElementById("winer").innerText = "The Winer Is Player Two";
+            }
+            
+        }
+        document.getElementById("gameOver").classList.add("active");
+    }
 
 }
 
@@ -102,7 +160,6 @@ function playerEvent(e){
         playerTwoHandlerY -= playerHandlerMoveSpeed;
     } else if (e.code == "ArrowDown" && playerTwoHandlerY < (row * blockSize) - 120) {
         playerTwoHandlerY += playerHandlerMoveSpeed;
-        console.log(borad.height);
     }
 }
 
