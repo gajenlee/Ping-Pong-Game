@@ -16,17 +16,24 @@ var playerOneHandlerY = (row * blockSize)/2 - playerHandlerHeight;
 var playerTwoHandlerX = (col * blockSize) - 20;
 var playerTwoHandlerY = (row * blockSize)/2 - playerHandlerHeight;
 
-var ballX = 0;
-var ballY = 0;
+var ballX = col * blockSize;
+var ballY = row * blockSize;
 var ballRadius = Math.PI * 6;
+
+var ballXSpeed = Math.floor(Math.random() * 76 + 25) / 10;
+var ballYSpeed = Math.floor(Math.random() * 76 + 25) / 10;
+
+if (Math.floor(Math.random() * 2) == 0) {
+    ballXSpeed = -ballXSpeed;
+}
+
+if (Math.floor(Math.random() * 2) == 0) {
+    ballYSpeed = -ballYSpeed
+}
 
 
 var ballMoveSpeed = 10;
 var playerHandlerMoveSpeed = 15;
-var ballVel = 1;
-var derArray = [-1, 1];
-var index = Math.floor(Math.random() * derArray.length);
-var der = derArray[index];
 
 // load the game console
 window.onload = function() {
@@ -54,6 +61,33 @@ function update() {
     // Ball
     drawBall(ballX, ballY, ballRadius, "red");
 
+    ballX += ballXSpeed;
+    ballY += ballYSpeed;
+
+    // Bull boundary
+    if (ballY - ballRadius - 20 / 2 < 0 && ballYSpeed < 0) {
+        ballYSpeed = -ballYSpeed;
+    }
+
+    if (ballY + ballRadius + 20 / 2 > borad.height && ballYSpeed > 0) {
+        ballYSpeed = -ballYSpeed;
+    }
+
+    // Player one collision
+    if (ballX < playerOneHandlerX + playerHandlerWidth + 20 && 
+        ballX + ballRadius > playerOneHandlerX && 
+        ballY < playerOneHandlerY + playerHandlerHeight &&
+        ballY + ballRadius > playerOneHandlerY) {
+            ballXSpeed = -ballXSpeed;
+        }
+    
+    // Player two collision
+    if (ballX < playerTwoHandlerX + playerHandlerWidth + 20 && 
+        ballX + ballRadius > playerTwoHandlerX && 
+        ballY < playerTwoHandlerY + playerHandlerHeight &&
+        ballY + ballRadius > playerTwoHandlerY) {
+            ballXSpeed = -ballXSpeed;
+        }
 
 }
 
